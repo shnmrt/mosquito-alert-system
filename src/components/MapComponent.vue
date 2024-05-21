@@ -114,14 +114,14 @@ export default {
             }
         },
         async constructData() {
-            await this.fetchData("../assets/firstQ.json", "firstQ")
-            await this.fetchData("../assets/thirdQ.json", "thirdQ")
-            await this.fetchData("../assets/median.json", "median")
-            await this.fetchData("../assets/2018.json", "2018")
-            await this.fetchData("../assets/2019.json", "2019")
-            await this.fetchData("../assets/2020.json", "2020")
-            await this.fetchData("../assets/2021.json", "2021")
-            await this.fetchData("../assets/2022.json", "2022")
+            await this.fetchData("./assets/firstQ.json", "firstQ")
+            await this.fetchData("./assets/thirdQ.json", "thirdQ")
+            await this.fetchData("./assets/median.json", "median")
+            await this.fetchData("./assets/2018.json", "2018")
+            await this.fetchData("./assets/2019.json", "2019")
+            await this.fetchData("./assets/2020.json", "2020")
+            await this.fetchData("./assets/2021.json", "2021")
+            await this.fetchData("./assets/2022.json", "2022")
 
             this.updateData(this.allData)
         },

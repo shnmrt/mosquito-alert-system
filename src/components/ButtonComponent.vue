@@ -45,13 +45,5 @@
   
   <style scoped>
 
-  .button-container {
-    
-    /* Add styles for your button container */
-  }
-  
-  .year-button {
-    /* Style your buttons */
-  }
   </style>
   
