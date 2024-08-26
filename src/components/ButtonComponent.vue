@@ -10,7 +10,7 @@
         :key="button.label"
         @click="emitValue(button.value)"
         type="button"
-        class="btn btn-outline-info btn-sm me-1"
+        class="btn btn-outline-info btn-sm me-1 custom-spacing"
       >
         {{ button.label }}
       </button>        
@@ -44,6 +44,9 @@
   </script>
   
   <style scoped>
+  .custom-spacing{
+    margin-bottom: 2px;
 
+  }
   </style>
   
