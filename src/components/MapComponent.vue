@@ -7,7 +7,9 @@ import Map from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
-import {fromLonLat} from "ol/proj"; 
+import {fromLonLat} from "ol/proj";
+// import { getUid } from 'ol/util';
+
 // vector layer
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
@@ -19,40 +21,38 @@ import Stroke from 'ol/style/Stroke';
 import chroma from 'chroma-js';
 import 'ol/ol.css';
 
-
-let vectorFeatures = new VectorLayer({
-    source : new VectorSource({ url:"../assets/geometry.geojson", format: new GeoJSON() }),
-    style : new Style({
-        fill: new Fill({ color: "rgba(255, 255, 204, 0.7)" }),
-        stroke : new Stroke({ color:"#000000", width: 0.5 }),
-    }),
-});
-
 export default {
     name : "MapComponent",
     props : {
         year: Number,
-        week: String
+        week: String,
+        scope: String,
     },
     mounted() {
-      this.initMap(),
-      this.constructData()
+      this.initMap('national'),
+      this.constructData('national')
+      this.constructData('regional')
     },
     data () {
         return {
-
             color_scale: chroma.scale("YlOrRd").colors(7),
-
-
+            vectors : {
+                "national" : this.vectorGenerator('national'),
+                "regional" : this.vectorGenerator('regional')
+            },
             allData: {
                 selectedYear : 2018,
-                selectedWeek : 'w_01'
+                selectedWeek : 'w_01',
+                selectedScope: 'national',
+                scope: {
+                    'national' : {},
+                    'regional' : {}
+                }
             },
         }
     },
     methods: {
-        initMap() {
-
+        initMap(scope) {
             this.map = new Map({
               target: this.$refs.mapContainer,
               projection: "EPSG:4326",
@@ -60,7 +60,8 @@ export default {
                 new TileLayer({
                   source: new OSM(),
                 }),
-                vectorFeatures
+                // vectorFeatures,
+                this.vectorGenerator(scope)
               ],
               view: new View({
                 center: fromLonLat([12, 42.0]),
@@ -75,7 +76,15 @@ export default {
         _keyFinder(obj, key, name) {
             return obj.find((item) => item[key] == name);
         },
-        
+        vectorGenerator(scope) {
+            return new VectorLayer({
+                source : new VectorSource({ url:"./assets/"+scope+"/geometry.geojson", format: new GeoJSON() }),
+                style : new Style({
+                    fill: new Fill({ color: "rgba(255, 255, 204, 0.7)" }),
+                    stroke : new Stroke({ color:"#000000", width: 0.5 }),
+                }),
+            });
+        },
         handleMapClick(event) {
             // this function needs to handle the click events
             const pixel = this.map.getEventPixel(event.originalEvent)
@@ -88,8 +97,9 @@ export default {
         },
         reStyleFeatures(week, year) {
             let reStyle = (week) => {
+                let vectorFeatures = this.map.getLayers().getArray()[1]
                 vectorFeatures.setStyle(feature => {
-                    let featureValue = this.allData[year].find(item => item["NAME_1"] === feature.get("NAME_1"))[week]
+                    let featureValue = this.allData['scope'][this.allData.selectedScope][year].find(item => item["NAME_1"] === feature.get("NAME_1"))[week]
 
                     return new Style({
                         fill : new Fill({ color: this.colorGenerator(featureValue) }),
@@ -113,31 +123,40 @@ export default {
                 }
             }
         },
-        async constructData() {
-            await this.fetchData("./assets/firstQ.json", "firstQ")
-            await this.fetchData("./assets/thirdQ.json", "thirdQ")
-            await this.fetchData("./assets/median.json", "median")
-            await this.fetchData("./assets/2018.json", "2018")
-            await this.fetchData("./assets/2019.json", "2019")
-            await this.fetchData("./assets/2020.json", "2020")
-            await this.fetchData("./assets/2021.json", "2021")
-            await this.fetchData("./assets/2022.json", "2022")
+        async constructData(scope) {
 
-            this.updateData(this.allData)
+            await this.fetchData("./assets/"+scope+"/firstQ.json", "firstQ", scope)
+            await this.fetchData("./assets/"+scope+"/thirdQ.json", "thirdQ", scope)
+            await this.fetchData("./assets/"+scope+"/median.json", "median", scope)
+            await this.fetchData("./assets/"+scope+"/2018.json", "2018", scope)
+            await this.fetchData("./assets/"+scope+"/2019.json", "2019", scope)
+            await this.fetchData("./assets/"+scope+"/2020.json", "2020", scope)
+            await this.fetchData("./assets/"+scope+"/2021.json", "2021", scope)
+            await this.fetchData("./assets/"+scope+"/2022.json", "2022", scope)
+
+            // this.updateData(this.allData)
         },
-        async fetchData (url, dataProperty) {
+        async fetchData (url, dataProperty, scope) {
             try {
                 const response = await fetch(url);
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`)
                 }
                 const json = await response.json();
-                this.allData[dataProperty] = json;
+                this.allData['scope'][scope][dataProperty] = json;
             } catch (e) {
                 console.error("Failed to fetch or parse data:", e.message);
             }
         },
-        
+        replaceLayer(scope) {
+            let newLayer = this.vectors[scope]
+            let currentLayer = this.map.getLayers().getArray()[1]
+            // remove process
+            this.map.removeLayer(currentLayer)
+            this.map.addLayer(newLayer)
+            this.map.getLayers().getArray()[1].getSource().changed()
+
+        },
         updateData(newData) {
             this.$store.dispatch('updateData',newData);
         }
@@ -159,7 +178,13 @@ export default {
             }
             this.reStyleFeatures(this.allData.selectedWeek, this.allData.selectedYear);
             this.updateData(this.allData)
-
+        },
+        scope(newScope) {
+            this.replaceLayer(newScope)
+            this.allData.selectedScope = newScope
+            this.updateData(this.allData)
+            this.reStyleFeatures(this.allData.selectedWeek, this.allData.selectedYear);
+            
         }
     }
 };
