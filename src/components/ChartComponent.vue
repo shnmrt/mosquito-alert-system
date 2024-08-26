@@ -35,52 +35,50 @@
         Plotly.newPlot(this.$refs.plotContainer, [{x:[], y:[]}], {} )
       },
       parseObject(obj, key) {
-
-        let query = obj[key].find((item)=> item['NAME_1'] == obj.selectedRegion)
+        let query = obj['scope'][obj.selectedScope][key].find((item) => item["NAME_1"] == obj.selectedRegion)
         return Object.values(query).slice(1,53)
       },
       generateChart(data) {
         if (data.selectedRegion !== undefined) {
- 
-          let year = data.selectedYear;
-          let region = data.selectedRegion;
-          let layout = {
-            title : region + ' in ' + String(year),
-            xaxis : { title : 'Week' },
-            yaxis : { title : 'Number of eggs'},
-            showlegend : true
- 
-          };
-          let chartdata = [
-            {
-              x : this.weeks,
-              y : this.parseObject(data, data.selectedYear),
-              type : 'scatter',
-              name : data.selectedYear,
-              hoverinfo : "y",
-              line : { color : 'gray'},
-            },
-            {
-              x : this.weeks,
-              y : this.parseObject(data, 'median'),
-              type : 'scatter',
-              name : 'median',
-              hoverinfo : 'y',
-              line : { color : 'blue', dash : 'dash' }
-            },
-          ]
-          Plotly.newPlot(
-            this.$refs.plotContainer,
-            chartdata,
-            layout
-          )
+          try {
+            let year = data.selectedYear;
+            let region = data.selectedRegion;
+            let layout = {
+              title : region + ' in ' + String(year),
+              xaxis : { title : 'Week' },
+              yaxis : { title : 'Number of eggs'},
+              showlegend : true
+  
+            };
+            let chartdata = [
+              {
+                x : this.weeks,
+                y : this.parseObject(data, data.selectedYear),
+                type : 'scatter',
+                name : data.selectedYear,
+                hoverinfo : "y",
+                line : { color : 'gray'},
+              },
+              {
+                x : this.weeks,
+                y : this.parseObject(data, 'median'),
+                type : 'scatter',
+                name : 'median',
+                hoverinfo : 'y',
+                line : { color : 'blue', dash : 'dash' }
+              },
+            ]
+            Plotly.newPlot(
+              this.$refs.plotContainer,
+              chartdata,
+              layout
+            )
+          } catch (e) {
+            this.renderEmpty()
+          }
         }
-
-
       },
-
     },
-
   };
 </script>
 
