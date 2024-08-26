@@ -8,7 +8,6 @@ import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
 import {fromLonLat} from "ol/proj";
-// import { getUid } from 'ol/util';
 
 // vector layer
 import VectorLayer from 'ol/layer/Vector';
@@ -134,7 +133,7 @@ export default {
             await this.fetchData("./assets/"+scope+"/2021.json", "2021", scope)
             await this.fetchData("./assets/"+scope+"/2022.json", "2022", scope)
 
-            // this.updateData(this.allData)
+            this.updateData(this.allData)
         },
         async fetchData (url, dataProperty, scope) {
             try {
