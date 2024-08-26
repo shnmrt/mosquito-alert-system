@@ -5,7 +5,7 @@
         </div>
         <input id="small-range" type="range" min=1 max=52 value="1"
         @input="handleInputChange"
-         class="form-range">
+         class="form-range custom-spacing">
 
     </div>
 </template>
@@ -29,5 +29,5 @@ export default {
 </script>
 
 <style>
-
+   
 </style>
