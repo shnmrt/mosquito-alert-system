@@ -3,11 +3,13 @@
     
     <div id="div1">
       <MapComponent
+      :scope=selectedScope
       :year=selectedYear
       :week=selectedWeek
       ></MapComponent>
       <div id="div2">
         <ControlComponent
+      @update-scope="handleScopeUpdate"
       @update-data="handleDataUpdate"
       @update-color="handleColorUptade"
       ></ControlComponent>
@@ -36,7 +38,8 @@ export default {
   data() {
     return {
       selectedYear:2018,
-      selectedWeek:'1'
+      selectedWeek:'1',
+      selectedScope:'national'
     }
   },
   methods: {
@@ -45,7 +48,10 @@ export default {
     },
     handleColorUptade(value) {
       this.selectedWeek = value;
-    }
+    },
+    handleScopeUpdate(value) {
+      this.selectedScope = value;
+    },
   }
   
 }
@@ -78,16 +84,17 @@ export default {
 
 #div2 {
   margin: 0 auto;
-  width: 15%;
-  height: 25%;
+  width: auto;
+  height: auto;
   position: absolute;
   bottom: 10px;
   left: 10px;
   display: flex;
-  background-color: white;
+  background-color: rgb(230, 230, 230);
   align-items: center;
   justify-content: center;
   border-radius: 10px;
+  padding: 10px
 }
 
 #div3 {
