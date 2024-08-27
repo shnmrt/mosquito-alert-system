@@ -18,6 +18,9 @@
     <div id="div3">
       <ChartComponent></ChartComponent>
     </div>
+    <div id="div4">
+      <LegendComponent></LegendComponent>
+    </div>
   </div>
 
 </template>
@@ -27,10 +30,12 @@
 import ControlComponent from "./components/ControlComponent.vue"
 import MapComponent from "./components/MapComponent.vue"
 import ChartComponent from "./components/ChartComponent.vue"
+import LegendComponent from "./components/LegendComponent.vue"
 
 export default {
   name: 'App',
   components: {
+    LegendComponent,
     ControlComponent,
     MapComponent,
     ChartComponent,
@@ -105,6 +110,17 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+}
 
+#div4 {
+  top: 10px;
+  right: 10px;
+  position: absolute;
+  display: flex;
+  background-color: rgb(230, 230, 230);
+  align-items: center;
+  justify-content: center;
+  border-radius:0;
+  padding: 0
 }
 </style>
