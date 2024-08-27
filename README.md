@@ -1,24 +1,19 @@
 # mosquito-alert-system
 
-## Project setup
-```
-npm install
-```
+### Overview
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+Mosquito alert system for Italy
 
-### Compiles and minifies for production
-```
-npm run build
-```
 
-### Lints and fixes files
-```
-npm run lint
-```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+
+## License
+© OpenGeoHub Foundation, 2023-2024. Licensed under the [MIT License](LICENSE).
+
+## Acknowledgements & Funding
+This work is supported by [OpenGeoHub Foundation](https://opengeohub.org/) and has received 
+funding from the European Commission (EC) through the projects:
+
+- [Open-Earth-Monitor Cyberinfrastructure](https://earthmonitor.org/): Environmental information 
+  to support EU’s Green Deal (1 Jun. 2022 – 31 May 2026 - 
+  [101059548](https://cordis.europa.eu/project/id/101059548))
