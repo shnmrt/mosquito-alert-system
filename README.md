@@ -1,8 +1,8 @@
-# mosquito-alert-system
+# Mosquito surveillance system
 
 ### Overview
 
-Mosquito alert system for Italy
+Mosquito surveillance system
 
 
 
