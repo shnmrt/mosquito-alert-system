@@ -39,10 +39,15 @@
         return Object.values(query).slice(1,53)
       },
       generateChart(data) {
+        let prefix = ""
+        if (data.selectedScope === 'regional') {
+          prefix = 'Province of '
+        }
         if (data.selectedRegion !== undefined) {
           try {
+            
             let year = data.selectedYear;
-            let region = data.selectedRegion;
+            let region = prefix + data.selectedRegion;
             let layout = {
               title : region + ' in ' + String(year),
               xaxis : { title : 'Week' },
