@@ -7,18 +7,24 @@ import Map from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
-import {fromLonLat} from "ol/proj";
+import {fromLonLat, toLonLat} from "ol/proj";
 
 // vector layer
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
+import Feature from 'ol/Feature';
+import Point from 'ol/geom/Point';
+import Icon from 'ol/style/Icon';
+// import Text from 'ol/style/Text';
+
 //styling the vector files
 import Style from 'ol/style/Style';
 import Fill from 'ol/style/Fill';
 import Stroke from 'ol/style/Stroke';
 import chroma from 'chroma-js';
 import 'ol/ol.css';
+
 
 export default {
     name : "MapComponent",
@@ -85,10 +91,41 @@ export default {
                 }),
             });
         },
+        iconEmplacement(markerposition) {
+            let layers = this.map.getLayers().getArray()
+            if (layers.length > 2) {
+                let lastlayer = layers[layers.length-1]
+                this.map.removeLayer(lastlayer)
+                this.map.getLayers().getArray()[layers.length-1].getSource().changed()
+            }
+            let place = new Feature({
+                geometry: new Point(fromLonLat(markerposition))
+            })
+            place.setStyle(
+                new Style({
+                    image: new Icon({
+                        color:'#000000',
+                        crossOrigin: '',
+                        src: 'assets/icon.svg',
+                        scale: 1
+                    })
+                })
+            )
+            const vec_layer = new VectorLayer({
+                source: new VectorSource({
+                    features: [place]
+                })
+            })
+            this.map.addLayer(vec_layer)
+            
+        },
         handleMapClick(event) {
             // this function needs to handle the click events
             const pixel = this.map.getEventPixel(event.originalEvent)
             // Hit detection
+            let markerPosition = toLonLat(event.coordinate)
+            this.iconEmplacement(markerPosition)
+
             this.map.forEachFeatureAtPixel(pixel, (feature) => {
                 const featureName = feature.get("NAME_1")
                 this.allData.selectedRegion = featureName
@@ -149,10 +186,15 @@ export default {
             }
         },
         replaceLayer(scope) {
+            let layers = this.map.getLayers().getArray()
+            if (layers.length == 3) {
+                this.map.removeLayer(layers[2])
+                this.map.removeLayer(layers[1])
+            }
+            if(layers.length == 2) {
+                this.map.removeLayer(layers[1])
+            }
             let newLayer = this.vectors[scope]
-            let currentLayer = this.map.getLayers().getArray()[1]
-            // remove process
-            this.map.removeLayer(currentLayer)
             this.map.addLayer(newLayer)
             this.map.getLayers().getArray()[1].getSource().changed()
 
