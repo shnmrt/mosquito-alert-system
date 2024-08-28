@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <p>Number of Eggs</p>
+        <p class="legendtitle">Number of<br>Mosquito<br>Eggs</p>
       <div 
         v-for="(value, index) in values" 
         :key="index" 
@@ -30,12 +30,9 @@
   
         for (let i = 0; i < treshholds.length; i++) {
           if (value <= treshholds[i]) {
-            console.log(i, chroma(this.colorscale[i]).alpha(0.7).css())
-            return chroma(this.colorscale[i]).alpha(0.7).css(); // Convert to CSS-compatible color
+            return chroma(this.colorscale[i]).alpha(0.7).css();
           }
         }
-  
-        return chroma(this.colorscale[this.colorscale.length - 1]).alpha(0.7).css(); // Default color if value exceeds all thresholds
       },
     },
   };
@@ -49,17 +46,23 @@
     padding: 10px;
 
   }
-  
+  .legendtitle {
+    font-size: 14px;
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+    margin-bottom: 5px;
+  }
   .color-box {
     margin: 0;
     padding: 0;
-    width: 100px;
+    width: 75px;
     height: 25px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: black;
     font-weight: bold;
+    font-size: 14px;
   }
   </style>
   
