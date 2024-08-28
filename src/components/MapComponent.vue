@@ -181,6 +181,7 @@ export default {
         scope(newScope) {
             this.replaceLayer(newScope)
             this.allData.selectedScope = newScope
+            this.allData.selectedRegion = null
             this.updateData(this.allData)
             this.reStyleFeatures(this.allData.selectedWeek, this.allData.selectedYear);
             
