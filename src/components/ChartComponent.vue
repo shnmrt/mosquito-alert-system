@@ -50,8 +50,8 @@
             let region = prefix + data.selectedRegion;
             let layout = {
               title : region + ' in ' + String(year),
-              xaxis : { title : 'Week' },
-              yaxis : { title : 'Number of eggs'},
+              xaxis : { title : 'Week', range :[1,52]},
+              yaxis : { title : 'Number of eggs', range : [0,400]},
               showlegend : true
   
             };
@@ -72,6 +72,14 @@
                 hoverinfo : 'y',
                 line : { color : 'blue', dash : 'dash' }
               },
+              {
+                x : [data.week, data.week],
+                y : [0, 400],
+                type : "scatter",
+                name : "week",
+                hoverinfo : 'x',
+                line : { color : 'red'},
+              }
             ]
             Plotly.newPlot(
               this.$refs.plotContainer,

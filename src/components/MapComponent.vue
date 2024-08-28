@@ -40,6 +40,7 @@ export default {
                 "regional" : this.vectorGenerator('regional')
             },
             allData: {
+                week: 1,
                 selectedYear : 2018,
                 selectedWeek : 'w_01',
                 selectedScope: 'national',
@@ -175,6 +176,7 @@ export default {
             } else {
                 this.allData.selectedWeek = 'w_' + newWeek
             }
+            this.allData.week = newWeek
             this.reStyleFeatures(this.allData.selectedWeek, this.allData.selectedYear);
             this.updateData(this.allData)
         },
