@@ -68,7 +68,7 @@
                 x : this.weeks,
                 y : this.parseObject(data, 'median'),
                 type : 'scatter',
-                name : 'median',
+                name : data.selectedScope + '<br>median',
                 hoverinfo : 'y',
                 line : { color : 'blue', dash : 'dash' }
               },
