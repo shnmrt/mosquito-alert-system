@@ -187,12 +187,10 @@ export default {
         },
         replaceLayer(scope) {
             let layers = this.map.getLayers().getArray()
-            if (layers.length == 3) {
-                this.map.removeLayer(layers[2])
-                this.map.removeLayer(layers[1])
-            }
-            if(layers.length == 2) {
-                this.map.removeLayer(layers[1])
+            let len_layers = layers.length
+            while (len_layers > 1) {
+                len_layers--
+                this.map.removeLayer(layers[len_layers])
             }
             let newLayer = this.vectors[scope]
             this.map.addLayer(newLayer)
